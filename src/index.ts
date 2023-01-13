@@ -301,8 +301,8 @@ function getSorted() {
 
     while (s.length > 0) {
         const i = Math.floor(Math.random() * s.length);
-        const u = s[i];
-        s.splice(i, 1);
+        [s[i], s[s.length - 1]] = [s[s.length - 1], s[i]];
+        const u = s.pop()!;
         ret.push(u);
         for (const v of g[u]) {
             if (--deg[v] == 0) {
