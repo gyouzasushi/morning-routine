@@ -3,18 +3,35 @@
 
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <!-- <link rel="stylesheet" type="text/css" href="index.css"> -->
+    <style id="style" media="screen" type="text/css">
+        .arrow {
+            animation: sortingAnime step-end 2s both;
+        }
+
+        @keyframes sortingAnime {
+            0% {
+                visibility: hidden;
+            }
+
+            100% {
+                visibility: visible;
+            }
+        }
+    </style>
     <title>morning-rutine</title>
 </head>
 
 <body>
     <div>
-        <p>手順１</p>
-        <p>
-            <input type="text" id="input_routine" size="30">
-            <input type="button" id="add_routine" value="追加">
-            <input type="button" id="add_complete" value="手順２へ">
-        </p>
+        <p id="phase"> 手順１</p>
+        <div id="gyouza" style="line-height: 0.5em;">
+            <p>
+                <input type="text" id="input_routine" size="30">
+                <input type="button" id="add_routine" value="追加">
+                <input type="button" id="add_complete" value="手順２へ">
+            </p>
+        </div>
         <svg id="routine_field" height="1em" width="1000"></svg>
     </div>
     <script src="src/index.js"></script>
