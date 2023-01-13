@@ -20,6 +20,7 @@ let offsetRight = 0;
 let queryCount = 0;
 let queryMax = 0;
 let inv = new Array<number>();
+let p = new Array<number>();
 
 
 function createrRoutineView(str: string, id: number, len: number, classname: string = 'none'): SVGElement {
@@ -48,14 +49,14 @@ function clearField() {
     while (routineField.firstChild) routineField.removeChild(routineField.firstChild);
 }
 function showRoutines() {
-    while (inv.length < routines.length) {
-        const i = inv.length;
-        inv.push(i);
+    while (p.length < routines.length) {
+        const i = p.length;
+        p.push(i);
     }
     routineField.setAttribute('height', `${routines.length * 2 + 1}em`)
     for (let i = 0; i < routines.length; i++) {
-        const routine = routines[inv[i]];
-        const routineView = createrRoutineView(routine, inv[i], getWidth(routine));
+        const routine = routines[p[i]];
+        const routineView = createrRoutineView(routine, p[i], getWidth(routine));
         routineField.appendChild(routineView);
     }
 }
@@ -98,13 +99,14 @@ function createArrowRight(s: number, t: number, classname: string = 'none'): SVG
     const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     arrow.setAttribute('fill', 'none');
     arrow.setAttribute('stroke', 'black');
-    while (inv.length < s || inv.length < t) {
-        const i = inv.length;
-        inv.push(i);
+    while (p.length < s || p.length < t) {
+        const i = p.length;
+        p.push(i);
     }
-    const sx = offsetLeft + getWidth(routines[inv[s]] + 20);
+    console.log('p:', p);
+    const sx = offsetLeft + getWidth(routines[p[s]] + 20);
     const sy = (s * 2 + 1.6) * size;
-    const tx = offsetLeft + getWidth(routines[inv[t]] + 20);
+    const tx = offsetLeft + getWidth(routines[p[t]] + 20);
     const ty = (t * 2 + 1.0) * size;
     const x = offsetRight + rightIndice[s] * 10 + 5;
     if (s < t) {
@@ -134,7 +136,6 @@ function createArrowRight(s: number, t: number, classname: string = 'none'): SVG
     return arrow;
 }
 function addArrowLeft(s: number, t: number, classname: string = 'none') {
-    console.log(leftIndice);
     leftEdges.push([s, t]);
     if (leftIndice[s] == 0) {
         leftCount++, leftIndice[s] = leftCount;
@@ -165,12 +166,12 @@ function clearArrowData() {
 
 
 addButton.onclick = () => {
-    clearField();
     const routine = routineInput.value;
     routineInput.value = "";
     if (routine.length === 0) return;
     routines.push(routine);
     offsetRight = Math.max(offsetRight, getWidth(routine) + offsetLeft + 20);
+    clearField();
     showRoutines();
 };
 nextButton.onclick = () => {
@@ -199,7 +200,6 @@ function formerButtonOnclick() {
     clearField();
     addArrowLeft(s, t);
     showRoutines();
-    console.log(g);
     queryCount++;
     if (queryCount == queryMax) {
         document.getElementById("done")!.style.visibility = 'visible';
@@ -217,7 +217,6 @@ function latterButtonOnclick() {
     clearField();
     addArrowRight(t, s);
     showRoutines();
-    console.log(g);
     queryCount++;
     if (queryCount == n * (n - 1) >> 1) {
         document.getElementById("done")!.style.visibility = 'visible';
@@ -230,7 +229,6 @@ function latterButtonOnclick() {
 }
 function sameButtonOnclick() {
     if (queryCount == queryMax) return;
-    console.log(g);
     queryCount++;
     if (queryCount == n * (n - 1) >> 1) {
         document.getElementById("done")!.style.visibility = 'visible';
@@ -251,7 +249,7 @@ function doneButtonOnclick() {
 
 }
 function sorting() {
-    const p = getSorted();
+    p = getSorted();
     if (p.length < n) {
         document.getElementById("error")!.style.visibility = 'visible';
         return;
